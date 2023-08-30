@@ -1,0 +1,22 @@
+/*Write
+a query to print the contest_id, emp_id, name, and the
+sums of t_submission, t_accept_submissions, t_views, and t_unique_views
+for each contest sorted by contest_id. Exclude the contest from the
+result if all four sums are 0.*/
+
+SELECT c1.contest_id, emp_id, name, 
+  COALESCE(SUM(t_submissions), 0) AS sum_t_submissions, 
+  COALESCE(SUM(t_accept_submissions), 0) AS sum_t_accept_submissions, 
+  COALESCE(SUM(t_views), 0) AS sum_t_views, 
+  COALESCE(SUM(t_unique_views), 0) AS sum_t_unique_views
+FROM contests c1 inner join colleges c2 USING(contest_id)
+inner join challenges c3 USING(college_id)
+LEFT JOIN view_stats v USING(challenge_id)
+LEFT JOIN submission_stats s USING(challenge_id)
+GROUP BY c1.contest_id, emp_id, name
+HAVING 
+    SUM(t_submissions) > 0 OR
+    SUM(t_accept_submissions) > 0 OR
+    SUM(t_views) > 0 OR
+    SUM(t_unique_views) > 0
+ORDER BY c1.contest_id;

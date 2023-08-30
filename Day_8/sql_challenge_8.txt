@@ -1,0 +1,14 @@
+-- Challange 08 Solution 
+
+SELECT
+    c.CustomerName,
+    c.RegistrationDate,
+    COUNT(DISTINCT o.OrderID) AS OrderCount,
+    ROUND(SUM(oi.Quantity * oi.UnitPrice) * 1.5, 2) AS PotentialCLV
+FROM customers c
+INNER JOIN orders o ON c.CustomerID = o.CustomerID
+INNER JOIN order_items oi ON o.OrderID = oi.OrderID
+WHERE o.OrderStatus = 'Completed'
+GROUP BY c.CustomerName, c.RegistrationDate
+ORDER BY PotentialCLV DESC
+LIMIT 5;

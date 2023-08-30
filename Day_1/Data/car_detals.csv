@@ -1,0 +1,9 @@
+sale_id,make,type,style,cost_$,purchased_date,salesman_id
+1,Honda,Civic,Sedan,40000,2021-01-01,1
+2,Ford,Explorer,SUV,35000,2022-05-02,2
+3,Ford,Explorer,SUV,25000,2022-04-01,3
+4,Audi,A4,Sedan,36000,2021-05-01,3
+5,Honda,Civic,Sedan,30000,2022-08-12,4
+6,Nissan,Altima,Sedan,48000,2021-10-06,2
+7,Toyota,Corolla,Hatchback,40000,2021-12-31,1
+8,Toyota,Corolla,Hatchback,60000,2022-08-25,1

@@ -1,0 +1,24 @@
+WITH EfficiencyData AS (
+    SELECT
+        e.team,
+        e.employee_name,
+        e.salary,
+        COALESCE(SUM(p.budget), 0) AS total_worth_of_completed_projects,
+        COUNT(p.project_name) AS completed_projects,
+        SUM(CASE WHEN p.end_date IS NOT NULL AND p.end_date <= p.expected_end_date THEN 1 ELSE 0 END) AS timely_completion_score,
+        SUM(CASE WHEN p.end_date IS NOT NULL AND p.end_date <= p.expected_end_date THEN 1 ELSE 0 END) AS bonus,
+        SUM(CASE WHEN p.end_date IS NOT NULL AND p.end_date <= p.expected_end_date THEN 0 ELSE 0.5 END) AS deductions,
+        RANK() OVER (PARTITION BY e.team ORDER BY total_worth_of_completed_projects * (1 + (timely_completion_score * 0.2 + bonus - deductions)) / salary DESC) 
+      AS efficiency_rank
+    FROM employee e
+    INNER JOIN projects p ON e.employee_id = p.employee_id
+    GROUP BY e.team, e.employee_name, e.salary
+)
+SELECT
+    team,
+    employee_name,
+    ROUND((total_worth_of_completed_projects * (1 + (timely_completion_score * 0.2 + bonus - deductions)) / salary), 2) AS efficiency_score
+FROM EfficiencyData
+WHERE efficiency_rank = 1;
+
+

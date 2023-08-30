@@ -1,0 +1,20 @@
+WITH cte1 AS (
+SELECT 
+  visit_date AS  date, 
+  COALESCE(COUNT(DISTINCT user_id), 0) AS visitors_count
+FROM visits
+GROUP BY date
+ORDER BY date)
+, cte2 AS (
+SELECT 
+  transaction_date AS date, 
+  COALESCE(COUNT(DISTINCT user_id), 0) AS transactions_count
+FROM transactions
+GROUP BY date
+ORDER BY date)
+SELECT 
+  date,
+    visitors_count,
+    transactions_count
+FROM cte1 
+INNER JOIN cte2 USING(date);

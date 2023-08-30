@@ -1,0 +1,14 @@
+
+SELECT
+    c.name AS client_name,
+    CONCAT(s.first_name, ' ', s.last_name) AS sales_representative_name,
+    SUM(t.facevalue) AS total_face_value,
+    SUM(t.actual_revenue) AS total_actual_revenue,
+    (((SUM(t.facevalue) - SUM(t.actual_revenue)) / SUM(t.facevalue)) * 100) AS percentage_down_from_revenue
+FROM trades t
+INNER JOIN clients c ON t.client_id = c.client_id
+INNER JOIN salesreps s ON t.salesperson_id = s.salesrep_id
+WHERE t.churn_date IS NOT NULL
+GROUP BY client_name, sales_representative_name
+ORDER BY percentage_down_from_revenue DESC
+LIMIT 10;

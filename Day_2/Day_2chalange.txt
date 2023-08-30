@@ -1,0 +1,9 @@
+/*2.Challenge #2
+Write a SQL query to find the top 3 salespeople (salesman_id, name) based on the total sales amount they achieved. 
+The result should be sorted in descending order of the total sales amount.
+*/
+
+SELECT s.salesman_id , s.name , Sum(c.cost_$) AS `Total_Sales_Amount`
+FROM salespersons s INNER JOIN car_details c ON s.salesman_id = c.salesman_id
+GROUP BY s.salesman_id,s.name
+ORDER BY Total_Sales_Amount  DESC limit 3 ;

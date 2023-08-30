@@ -1,0 +1,35 @@
+/* Write an SQL query to display the cashier_id along with the total discount amount issued by each cashier, then add the top department name with the highest refund given
+   by each cashier, then add the total amount of discount given by the each cashier in the top department and how many times the cashier gives the discount 
+   in that top department.
+
+At the end, it'll show the cashier_id, total_discount_amount, top_department_name, top_department_total_discount, and top_department_total_count.
+*/
+
+
+
+
+WITH cte1 AS (
+SELECT cashier_id, 
+		ROUND(SUM(discount), 2) AS `total_discount_amount`
+FROM sales
+GROUP BY cashier_id
+), 
+cte2 AS (
+SELECT cashier_id, 
+		department_name AS `top_department_name`,
+        ROUND(SUM(discount), 2) AS `top_department_total_discount`,
+        COUNT(*) AS `top_department_total_count`,
+        RANK() OVER (PARTITION BY cashier_id ORDER BY SUM(discount) DESC) AS rn
+FROM sales
+GROUP BY cashier_id, `top_department_name`
+)
+SELECT
+    cte1.cashier_id,
+    total_discount_amount,
+    top_department_name,
+    top_department_total_discount,
+    top_department_total_count
+FROM
+    cte1 
+INNER JOIN cte2 USING(cashier_id)
+WHERE rn = 1;

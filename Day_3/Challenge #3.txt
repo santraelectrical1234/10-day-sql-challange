@@ -1,0 +1,10 @@
+/* Challenge #3
+Write a SQL query to find the rank to each salesperson on the basis of number of car sold.
+Please use continuous rank and rank should be visible in your out-put.*/
+
+SELECT  s.name AS `Salesman_Name`,
+          count(*) as `Number_of_cars_sold`,
+          DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS `Rank` 
+FROM car_details c INNER JOIN salespersons s ON  s.salesman_id = c.salesman_id
+GROUP BY 1
+ORDER BY 3;
