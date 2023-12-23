@@ -13,3 +13,6 @@
 - Text functions 
 - Efficient handling of large datasets
 
+## Additionally, I've put together a presentation summarizing my journey through this challenge.
+
+
